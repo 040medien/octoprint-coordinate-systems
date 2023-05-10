@@ -5,7 +5,7 @@ setup(
     version="0.1",
     description="An OctoPrint plugin to manage workspace coordinate systems (G54-G59.3) for Marlin-based CNC machines",
     author="Frederik Kemner",
-    author_email="coordinate-systems@fredo.org",
+    author_email="octoprint-coordinate-systems@fredo.org",
     url="https://github.com/040medien/octoprint-coordinate-systems",
     packages=find_packages(),
     include_package_data=True,
