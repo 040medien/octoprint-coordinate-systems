@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="OctoPrint-CoordinateSystems",
+    name="Coordinate Systems",
     version="0.1",
     description="An OctoPrint plugin to manage workspace coordinate systems (G54-G59.3) for Marlin-based CNC machines",
     author="Frederik Kemner",
