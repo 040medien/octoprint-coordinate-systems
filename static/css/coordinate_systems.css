@@ -1,0 +1,17 @@
+#coordinate_systems {
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+#coordinate_systems table {
+  width: 100%;
+}
+
+#coordinate_systems table input[type="number"] {
+  width: 100%;
+}
+
+#coordinate_systems table button.btn-set-offsets {
+  width: 100%;
+}
+
