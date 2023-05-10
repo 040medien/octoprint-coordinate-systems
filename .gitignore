@@ -1,2 +1,39 @@
+# Python related
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+dist/
+build/
+*.egg
+*.so
+*.swp
 
-static/.DS_Store
+# OctoPrint related
+*.log
+*.pid
+*.db
+*.bak
+/logs
+/uploads
+
+# Virtual environment
+venv/
+*.venv
+.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.user
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
