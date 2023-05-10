@@ -1,0 +1,31 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+  <div id="coordinate_systems" class="row-fluid">
+    <h1>Workspace Coordinate Systems</h1>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Coordinate System</th>
+          <th>X Offset</th>
+          <th>Y Offset</th>
+          <th>Z Offset</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for coord_system in ["G54", "G55", "G56", "G57", "G58", "G59", "G59.1", "G59.2", "G59.3"] %}
+        <tr>
+          <td>{{ coord_system }}</td>
+          <td><input type="number" step="any" class="input-offset" data-system="{{ coord_system }}" data-axis="X"></td>
+          <td><input type="number" step="any" class="input-offset" data-system="{{ coord_system }}" data-axis="Y"></td>
+          <td><input type="number" step="any" class="input-offset" data-system="{{ coord_system }}" data-axis="Z"></td>
+          <td>
+            <button class="btn btn-primary btn-set-offsets" data-system="{{ coord_system }}">Set Offsets</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
