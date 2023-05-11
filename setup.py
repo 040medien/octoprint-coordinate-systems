@@ -3,7 +3,7 @@
 
 from setuptools import setup
 plugin_identifier = 'coordinatesystems'
-plugin_package = 'octoprint_coordinatesystems'
+plugin_package = 'octoprint_coordinate_systems'
 plugin_name = 'OctoPrint-CoordinateSystems'
 plugin_version = '0.1'
 plugin_description = 'An OctoPrint plugin to manage workspace coordinate systems (G54-G59.3) for Marlin-based CNC machines'
