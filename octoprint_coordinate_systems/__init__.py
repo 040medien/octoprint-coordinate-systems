@@ -1,4 +1,5 @@
 import octoprint.plugin
+from octoprint.events import Events
 
 class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
                               octoprint.plugin.TemplatePlugin,
@@ -52,11 +53,31 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
             if offsets is not None:
                 self.set_offsets(offsets)
 
-    def set_offsets(self, offsets):
-        # Implement the functionality to set the offsets for each coordinate system.
-        # You will need to send the appropriate GCODE commands to the printer.
-        # Example: self._printer.commands("G10 L2 P1 X{x} Y{y} Z{z}".format(**offsets['G54']))
-        pass
+    def set_offsets(self, system, xOffset, yOffset, zOffset):
+            # Send G53 to switch to machine coordinates
+            self._printer.commands("G53")
+    
+            # Request current machine coordinates with M114
+            self._printer.commands("M114")
+    
+            # Define a callback to handle the 'PositionUpdate' event
+            def on_position_update(event, payload):
+                # Calculate new positions based on the desired offsets
+                newX = payload["x"] - xOffset
+                newY = payload["y"] - yOffset
+                newZ = payload["z"] - zOffset
+    
+                # Switch to the desired workspace coordinate system
+                self._printer.commands(system)
+    
+                # Set new positions for the workspace coordinate system
+                self._printer.commands("G92 X{} Y{} Z{}".format(newX, newY, newZ))
+    
+                # Unsubscribe from the 'PositionUpdate' event
+                self._event_bus.unsubscribe(Events.POSITION_UPDATE, on_position_update)
+    
+            # Subscribe to the 'PositionUpdate' event
+            self._event_bus.subscribe(Events.POSITION_UPDATE, on_position_update)
 
 __plugin_name__ = "Coordinate Systems Plugin"
 __plugin_pythoncompat__ = ">=3.7,<4"
