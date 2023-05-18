@@ -8,7 +8,10 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
                               octoprint.plugin.EventHandlerPlugin,
                               octoprint.plugin.SettingsPlugin):
 
-    # Other methods...
+    def get_template_configs(self):
+        return [
+            {"type": "tab", "custom_bindings": True, "template": "coordinate_systems_tab.jinja2"}
+        ]
 
     def save_offsets(self, system, xOffset, yOffset, zOffset, label):
         self._settings.set(["offsets", system], {"x": xOffset, "y": yOffset, "z": zOffset, "label": label})
