@@ -2,7 +2,7 @@
 ''' Plugin setup file '''
 
 from setuptools import setup
-plugin_identifier = 'coordinate_systems'
+plugin_identifier = 'coordinatesystems'
 plugin_package = 'coordinate_systems'
 plugin_name = 'OctoPrint-CoordinateSystems'
 plugin_version = '0.1'
