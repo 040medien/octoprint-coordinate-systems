@@ -127,9 +127,9 @@ $(function() {
         };
     }
     
-    OCTOPRINT_VIEWMODELS.push([
-        CoordinateSystemsViewModel,
-        ['controlViewModel'],
-        ['#tab_plugin_coordinate_systems']
-    ]);
+    OCTOPRINT_VIEWMODELS.push({
+        construct: CoordinateSystemsViewModel,
+        dependencies: ["settingsViewModel"],  // List of other ViewModels that your ViewModel depends on
+        elements: ["#tab_plugin_coordinate_systems"]  // IDs of the HTML elements to bind your ViewModel to
+    });
 });

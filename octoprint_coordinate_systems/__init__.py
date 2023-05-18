@@ -10,7 +10,7 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
 
     def get_template_configs(self):
         return [
-            {"type": "tab", "custom_bindings": True, "template": "coordinate_systems_tab.jinja2"}
+            {"type": "tab", "custom_bindings": False, "template": "coordinate_systems_tab.jinja2"}
         ]
 
     def get_assets(self):
