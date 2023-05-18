@@ -78,6 +78,6 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
                 'z': z
             })
 
-__plugin_name__ = "Coordinate Systems Plugin"
+__plugin_name__ = "Workspace Coordinate Systems"
 __plugin_pythoncompat__ = ">=3.7,<4"
 __plugin_implementation__ = CoordinateSystemsPlugin()
