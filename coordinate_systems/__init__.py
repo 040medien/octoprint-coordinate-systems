@@ -1,6 +1,7 @@
 import octoprint.plugin
 from octoprint.events import Events
 from octoprint.settings import NoSuchSettingsPath
+from octoprint.server import plugin_blueprint
 
 class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
                               octoprint.plugin.TemplatePlugin,
@@ -18,6 +19,50 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
             "js": ["js/coordinate_systems.js"],
             "css": ["css/coordinate_systems.css"]
         }
+
+    @octoprint.plugin.BlueprintPlugin.route("/set_offsets", methods=["POST"])
+    def set_offsets_route(self):
+        data = request.json
+        system = data.get('system')
+        x_offset = data.get('x_offset')
+        y_offset = data.get('y_offset')
+        z_offset = data.get('z_offset')
+        self.set_offsets(system, x_offset, y_offset, z_offset)
+        return jsonify(success=True)
+
+    @octoprint.plugin.BlueprintPlugin.route("/save_offsets", methods=["POST"])
+    def save_offsets_route(self):
+        data = request.json
+        system = data.get('system')
+        x_offset = data.get('x_offset')
+        y_offset = data.get('y_offset')
+        z_offset = data.get('z_offset')
+        label = data.get('label')
+        self.save_offsets(system, x_offset, y_offset, z_offset, label)
+        return jsonify(success=True)
+
+    @octoprint.plugin.BlueprintPlugin.route("/load_offsets", methods=["GET"])
+    def load_offsets_route(self):
+        system = request.args.get('system')
+        offsets = self.load_offsets(system)
+        return jsonify(offsets=offsets)
+
+    @octoprint.plugin.BlueprintPlugin.route("/set_position", methods=["POST"])
+    def set_position_route(self):
+        data = request.json
+        system = data.get('system')
+        x = data.get('x')
+        y = data.get('y')
+        z = data.get('z')
+        self.set_position(system, x, y, z)
+        return jsonify(success=True)
+
+    @octoprint.plugin.BlueprintPlugin.route("/set_system", methods=["POST"])
+    def set_system_route(self):
+        data = request.json
+        system = data.get('system')
+        self.set_system(system)
+        return jsonify(success=True)
 
     def save_offsets(self, system, xOffset, yOffset, zOffset, label):
         self._settings.set(["offsets", system], {"x": xOffset, "y": yOffset, "z": zOffset, "label": label})
