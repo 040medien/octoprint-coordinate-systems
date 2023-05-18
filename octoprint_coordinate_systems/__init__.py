@@ -13,6 +13,12 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
             {"type": "tab", "custom_bindings": True, "template": "coordinate_systems_tab.jinja2"}
         ]
 
+    def get_assets(self):
+        return {
+            "js": ["js/coordinate_systems.js"],
+            "css": ["css/coordinate_systems.css"]
+        }
+
     def save_offsets(self, system, xOffset, yOffset, zOffset, label):
         self._settings.set(["offsets", system], {"x": xOffset, "y": yOffset, "z": zOffset, "label": label})
         self._settings.save()  # save the settings to file
