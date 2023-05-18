@@ -13,6 +13,7 @@ $(function() {
         self.xPosition = ko.observable(0);
         self.yPosition = ko.observable(0);
         self.zPosition = ko.observable(0);
+        self.label = ko.observable();
 
         self.systemLabels = ko.observableArray([]);
         
