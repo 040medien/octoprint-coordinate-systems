@@ -1,7 +1,7 @@
 import octoprint.plugin
 from octoprint.events import Events
 from octoprint.settings import NoSuchSettingsPath
-from octoprint.server import plugin_blueprint
+from flask import jsonify, request
 
 class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
                               octoprint.plugin.TemplatePlugin,
