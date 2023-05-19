@@ -79,6 +79,9 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
         # Switch to the desired workspace coordinate system
         self._printer.commands(system)
 
+        # Subscribe to the 'PositionUpdate' event
+        self._event_bus.subscribe(Events.POSITION_UPDATE, on_position_update)
+
         # Reset the workspace coordinate system to machine zero
         self._printer.commands("G92.1")
 
@@ -97,9 +100,6 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
 
             # Unsubscribe from the 'PositionUpdate' event
             self._event_bus.unsubscribe(Events.POSITION_UPDATE, on_position_update)
-
-        # Subscribe to the 'PositionUpdate' event
-        self._event_bus.subscribe(Events.POSITION_UPDATE, on_position_update)
 
     def set_position(self, system, x, y, z):
         # Switch to the desired workspace coordinate system
