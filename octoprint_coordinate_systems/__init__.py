@@ -9,6 +9,9 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
                               octoprint.plugin.EventHandlerPlugin,
                               octoprint.plugin.SettingsPlugin,
                               octoprint.plugin.BlueprintPlugin):
+    def __init__(self):
+        super().__init__()
+        self.processing_offsets = False
 
     def get_template_configs(self):
         return [
@@ -76,30 +79,17 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
             return {"x": 0, "y": 0, "z": 0, "label": ""}  # return default offsets and label if none exist
 
     def set_offsets(self, system, xOffset, yOffset, zOffset):
+        self.processing_offsets = True
+        
+        self.xOffset = xOffset
+        self.yOffset = yOffset
+        self.zOffset = zOffset
+        
         # Switch to the desired workspace coordinate system
         self._printer.commands(system)
 
-        # Subscribe to the 'PositionUpdate' event
-        self._event_bus.subscribe(Events.POSITION_UPDATE, on_position_update)
-
         # Reset the workspace coordinate system to machine zero
         self._printer.commands("G92.1")
-
-        # Get position update
-        self._printer.commands("M114")
-
-        # Define a callback to handle the 'PositionUpdate' event
-        def on_position_update(event, payload):
-            # Calculate new positions based on the desired offsets
-            newX = payload["x"] - xOffset
-            newY = payload["y"] - yOffset
-            newZ = payload["z"] - zOffset
-
-            # Set new positions for the workspace coordinate system
-            self._printer.commands("G92 X{} Y{} Z{}".format(newX, newY, newZ))
-
-            # Unsubscribe from the 'PositionUpdate' event
-            self._event_bus.unsubscribe(Events.POSITION_UPDATE, on_position_update)
 
     def set_position(self, system, x, y, z):
         # Switch to the desired workspace coordinate system
@@ -114,6 +104,15 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
 
     # ~~ EventPlugin mixin
     def on_event(self, event, payload):
+        if event == Events.POSITION_UPDATE and self.processing_offsets:
+            newX = payload["x"] - self.xOffset
+            newY = payload["y"] - self.yOffset
+            newZ = payload["z"] - self.zOffset
+            
+            self._printer.commands("G92 X{} Y{} Z{}".format(newX, newY, newZ))
+            
+            self.processing_offsets = False  # reset the flag
+        
         if event == Events.POSITION_UPDATE:
             # Get the current position
             x = payload['x']
