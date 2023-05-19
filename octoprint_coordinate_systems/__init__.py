@@ -7,7 +7,8 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
                               octoprint.plugin.TemplatePlugin,
                               octoprint.plugin.AssetPlugin,
                               octoprint.plugin.EventHandlerPlugin,
-                              octoprint.plugin.SettingsPlugin):
+                              octoprint.plugin.SettingsPlugin,
+                              octoprint.plugin.BlueprintPlugin):
 
     def get_template_configs(self):
         return [
