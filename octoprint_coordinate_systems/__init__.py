@@ -76,11 +76,11 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
             return {"x": 0, "y": 0, "z": 0, "label": ""}  # return default offsets and label if none exist
 
     def set_offsets(self, system, xOffset, yOffset, zOffset):
-        # Switch to machine coordinates
-        self._printer.commands("G53")
+        # Switch to the desired workspace coordinate system
+        self._printer.commands(system)
 
-        # Request current machine coordinates with M114
-        self._printer.commands("M114")
+        # Reset the workspace coordinate system to machine zero
+        self._printer.commands("G92.1")
 
         # Define a callback to handle the 'PositionUpdate' event
         def on_position_update(event, payload):
@@ -88,12 +88,6 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
             newX = payload["x"] - xOffset
             newY = payload["y"] - yOffset
             newZ = payload["z"] - zOffset
-
-            # Switch to the desired workspace coordinate system
-            self._printer.commands(system)
-
-            # Reset the workspace coordinate system to machine zero
-            self._printer.commands("G92.1")
 
             # Set new positions for the workspace coordinate system
             self._printer.commands("G92 X{} Y{} Z{}".format(newX, newY, newZ))
