@@ -82,6 +82,9 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
         # Reset the workspace coordinate system to machine zero
         self._printer.commands("G92.1")
 
+        # Get position update
+        self._printer.commands("M114")
+
         # Define a callback to handle the 'PositionUpdate' event
         def on_position_update(event, payload):
             # Calculate new positions based on the desired offsets
@@ -109,6 +112,7 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
         # Switch to the desired workspace coordinate system
         self._printer.commands(system)
 
+    # ~~ EventPlugin mixin
     def on_event(self, event, payload):
         if event == Events.POSITION_UPDATE:
             # Get the current position
