@@ -30,7 +30,7 @@ $(function() {
         ]);
 
         self.save_offsets = function(system, xOffset, yOffset, zOffset, label) {
-            OctoPrint.postJson('plugin/coordinate_systems/save_offsets', {
+            OctoPrint.postJson('plugin/coordinatesystems/save_offsets', {
                 system: system,
                 x_offset: xOffset,
                 y_offset: yOffset,
@@ -40,7 +40,7 @@ $(function() {
         };
 
         self.restore_offsets = function(system) {
-            OctoPrint.getJson('plugin/coordinate_systems/load_offsets', {
+            OctoPrint.getJson('plugin/coordinatesystems/load_offsets', {
                 system: system
             }).done(function(response) {
                 var offsets = response.offsets;
@@ -88,7 +88,7 @@ $(function() {
         
         self.activeSystem.subscribe(function(newSystem) {
             // Switch to the new coordinate system
-            OctoPrint.postJson('plugin/coordinate_systems/set_system', {
+            OctoPrint.postJson('plugin/coordinatesystems/set_system', {
                 system: newSystem
             });
 
@@ -98,7 +98,7 @@ $(function() {
 
         self.set_offsets = function(system, xOffset, yOffset, zOffset) {
             // Use OctoPrint's API client library to make a POST request to your plugin's API endpoint
-            OctoPrint.postJson('plugin/coordinate_systems/set_offsets', {
+            OctoPrint.postJson('plugin/coordinatesystems/set_offsets', {
                 system: system,
                 x_offset: xOffset,
                 y_offset: yOffset,
@@ -107,7 +107,7 @@ $(function() {
         };
 
         self.set_position = function(system, x, y, z) {
-            OctoPrint.postJson('plugin/coordinate_systems/set_position', {
+            OctoPrint.postJson('plugin/coordinatesystems/set_position', {
                 system: system,
                 x: x,
                 y: y,
@@ -116,7 +116,7 @@ $(function() {
         };
 
         self.onDataUpdaterPluginMessage = function(plugin, data) {
-            if (plugin != 'coordinate_systems') {
+            if (plugin != 'coordinatesystems') {
                 return;
             }
 
@@ -131,6 +131,6 @@ $(function() {
     OCTOPRINT_VIEWMODELS.push({
         construct: CoordinateSystemsViewModel,
         dependencies: ["settingsViewModel"],  // List of other ViewModels that your ViewModel depends on
-        elements: ["#tab_plugin_coordinate_systems"]  // IDs of the HTML elements to bind your ViewModel to
+        elements: ["#tab_plugin_coordinatesystems"]  // IDs of the HTML elements to bind your ViewModel to
     });
 });
