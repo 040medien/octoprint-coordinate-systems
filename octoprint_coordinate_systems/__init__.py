@@ -79,6 +79,8 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
             return {"x": 0, "y": 0, "z": 0, "label": ""}  # return default offsets and label if none exist
 
     def set_offsets(self, system, xOffset, yOffset, zOffset):
+        self._logger.info("Setting offsets: system=%s, xOffset=%s, yOffset=%s, zOffset=%s" % (system, xOffset, yOffset, zOffset))
+
         self.processing_offsets = True
         
         self.xOffset = xOffset
@@ -91,7 +93,12 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
         # Reset the workspace coordinate system to machine zero
         self._printer.commands("G92.1")
 
+        # Get position update
+        self._printer.commands("M114")
+
     def set_position(self, system, x, y, z):
+        self._logger.info("Setting position: system=%s, x=%s, y=%s, z=%s" % (system, x, y, z))
+
         # Switch to the desired workspace coordinate system
         self._printer.commands(system)
 
@@ -104,16 +111,18 @@ class CoordinateSystemsPlugin(octoprint.plugin.StartupPlugin,
 
     # ~~ EventPlugin mixin
     def on_event(self, event, payload):
-        if event == Events.POSITION_UPDATE and self.processing_offsets:
-            newX = payload["x"] - self.xOffset
-            newY = payload["y"] - self.yOffset
-            newZ = payload["z"] - self.zOffset
-            
-            self._printer.commands("G92 X{} Y{} Z{}".format(newX, newY, newZ))
-            
-            self.processing_offsets = False  # reset the flag
-        
         if event == Events.POSITION_UPDATE:
+            if self.processing_offsets:
+                self._logger.info("Received POSITION_UPDATE event: payload=%s" % payload)
+
+                newX = payload["x"] - self.xOffset
+                newY = payload["y"] - self.yOffset
+                newZ = payload["z"] - self.zOffset
+            
+                self._printer.commands("G92 X{} Y{} Z{}".format(newX, newY, newZ))
+            
+                self.processing_offsets = False  # reset the flag
+
             # Get the current position
             x = payload['x']
             y = payload['y']
